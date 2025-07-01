@@ -1,0 +1,513 @@
+how to develop database object for enhance join feature using mysql RDBMS backend software
+01.press ctrl + ESC keys for click windows start button
+02.type XAMPP control panel in Type here to search textbox
+03.press open or run as administrator menu item
+04.press start button from MySQL module 
+05.optional: press start button from apache module
+
+-> mysql or appache default hostname is local host
+->mysql default port number is 3306
+->apache default port number is 80
+
+06. if display following messages in XAMPP control panel v3.3.0 window then press quit button else skip this step
+->15:32:51 [apache] XAMPP apache is already running on port 80
+->15:32:51 [apache] XAMPP apache is already running on port 443
+->15:32:51 [apache] XAMPP apache is already running on port 3306
+
+07.#mysql -u root -p
+
+
+08. MariaDB[(none)]>system cls
+09.MariaDB[(none)]>show databases;
+
+
+10. MariaDB[(none)]>create database if not exist stkdb charecter set latin1 collate latin1_swedish_cl;
+
+11. MariaDB[(none)]>system cls
+
+12. MariaDB[(none)]>show databases;
+
+
+13. MariaDB[(none)]>select databases();
+14. MariaDB[(none)]>use stkdb;
+15. MariaDB[(stkdb)]>system cls
+16. MariaDB[(stkdb)]>select databases();
+17.show tables;
+
+
+How to develop table object for enhance join feature using MySQL RDBMS backend software?
+
+01.  MariaDB[(stkdb)]>drop table if exists stdtbl;
+02.MariaDB[(stkdb)]>drop table if exists usttbl;
+03.MariaDB[(stkdb)]>drop table if exist psttble;
+04.MariaDB[(stkdb)]>show tables;
+05.MariaDB[(stkdb)]>create or replace table stdtbl
+	(
+	pid integer primary key,
+	pname varchar(3) not null,
+	edu enum("UG","PG","-"check(upper(edu)in("UG","PG","-"))
+	);
+
+06.MariaDB[(stkdb)]>create or replace table usttbl
+	(
+	pid integer primary key,
+	prole enum('Tutor','HM')default"Tutor"check(upper(prole)in("Tutor","HM"))
+	);
+
+07.MariaDB[(stkdb)]>create or replace table psttbl
+	(
+	pid integer primary key,
+	prole enum("coach","HOD")default"coach"check(upper(prole)in("coach","HOD"))
+	);
+
+08.MariaDB[(stkdb)]>show tables;
+09.MariaDB[(stkdb)]>select * from stdtbl;
+10.MariaDB[(stkdb)]>
+	insert into stdtbl 
+	values
+	(1001,'x1','UG')
+	(1002,'x2','PG')
+	(1003,'x3','-')
+	(1004,'x4','UG')
+	(1005,'x5','PG');
+11.MariaDB[(stkdb)]>
+	insert into stdtbl
+	(pid,pname)
+	values
+	(1006,'x6');
+
+12.MariaDB[(stkdb)]>
+	insert into stdtbl
+	(pid,pname)
+	values
+	(1007,'x7','UG');
+	(1008,'x8','PG');
+13..MariaDB[(stkdb)]>
+	insert into stdtbl
+	(pid,pname)
+	values
+	(1009,'x9')
+14..MariaDB[(stkdb)]>select * from stdtbl;
+
+15..MariaDB[(stkdb)]>select count(*) from stdtbl;
+
+16..MariaDB[(stkdb)]>select * from usttbl;
+
+17..MariaDB[(stkdb)]>
+	insert into usttbl values
+	(1001,"Tutor");
+	(1004,"HM");
+
+18..MariaDB[(stkdb)]>
+	insert into usttbl 
+	(pid)
+	values
+	(1007);
+
+19..MariaDB[(stkdb)]>select * from usttbl;
+
+20..MariaDB[(stkdb)]>select count(*) from usttbl;
+
+21..MariaDB[(stkdb)]>select * from psttbl;
+
+22..MariaDB[(stkdb)]>insert into psttbl;
+	(pid)
+	values
+	(1001);
+23..MariaDB[(stkdb)]>insert into psttbl;
+	values
+	(1001,"HOD"),
+	(1005,"coach")
+	(1008,"HOD")
+
+24..MariaDB[(stkdb)]>select * from psttbl;
+
+25..MariaDB[(stkdb)]>select count(*) from psstbl;
+
+
+How to develop inner join feature(way:01) ?
+
+01..MariaDB[(stkdb)]>
+	select * from stdtbl
+	inner join usttbl
+	using (pid);
+
+02...MariaDB[(stkdb)]>
+	select * from stdtbl
+	inner join psttbl
+	using (pid);
+
+03.MariaDB[(stkdb)]>
+	select * from stdtbl
+	inner join usttbl
+	using (pid)
+	inner join psttbl
+	using (pid);
+
+
+How to develop inner join  feature (way:02)?
+
+01.MariaDB[(stkdb)]>
+	select * from stdtbl s1
+	inner join usttbl u1
+	on.s1.pid=u1.pid;
+
+02.MariaDB[(stkdb)]>
+	select * from stdtbl s1
+	inner join psttbl u1
+	on.s1.pid=p1.pid;
+
+03..MariaDB[(stkdb)]>
+	select * from stdtbl
+	inner join usttbl u1
+	on s1.pid=u1.pid
+	inner join psttbl p1
+	on s1,pid=p1.pid;
+
+
+
+How to develop inner join feature (way 03)?
+
+
+01..MariaDB[(stkdb)]>
+	select * from stdtbl
+	where exits
+	(
+	select 1 from usttbl
+	where stdtbl.pid=usttbl.pid
+	);
+
+02..MariaDB[(stkdb)]>
+	select * from stdtbl
+	where exists
+	(
+	select 1 from psttbl
+	where stdtbl.pid=psstbl.pid
+	);
+
+03..MariaDB[(stkdb)]>
+	select * from stdtbl
+	where exist 
+	(
+	select 1 from usstbl
+	where stdtbl.pid=usttbl.pid
+	)and exist
+	(
+	select 1 from psttbl
+	where stdtbl.pid=pstttble.pid
+	);
+
+How to develop Left join feature(way01)?
+
+01..MariaDB[(stkdb)]>
+	select * from stdtbl
+	left join usttbl
+	using(pid);
+
+02..MariaDB[(stkdb)]>
+	select * from stdtbl
+	left join psttbl
+	using (pid);
+
+03..MariaDB[(stkdb)]>
+	select * from stdtbl
+	left join usttbl
+	using(pid)
+	ledt join psttbl
+	using(pid);
+
+How to develop left join feature(way02)?
+
+01..MariaDB[(stkdb)]>
+	select * from stdtbl
+	left join usttbl
+	on stdtbl.pid=usttbl.pid;
+
+02..MariaDB[(stkdb)]>
+select *from stdtbl
+left join psttbl
+on stdtbl.pid=psttbl.pid;
+
+03..MariaDB[stkdb]>
+select*from stdtbl
+left join usttbl
+on stdtbl.pid=usttbl.pid
+left join psttbl
+on stdtbl.pid=psttbl.pid;
+
+
+how to develop left join exclusion feature (way:01)?
+
+01. MariaDB[stkdb]
+select *from stdtbl
+left join usttbl
+using(pid)
+where prole is null;
+
+02. MariaDB[stkdb]
+select *from stdtbl
+left join psttbl
+using(pid)
+where prole is null;
+
+
+03.MariaDB[stkdb]
+select *from stdtbl
+left join usttbl
+using(pid)
+left join psttbl
+using(pid)
+where usttbl.prole is null and psttbl.prole is null;
+
+04.MariaDB[stkdb]
+select *from stdtbl.pid,pname,edu from stdtbl
+left join usttbl
+using(pid)
+left join psttbl
+using(pid)
+where usttbl.prole is null and psttbl.prole is null;
+
+how to develop left join exclusion feature (way:02)?
+
+01. MariaDB[stkdb]
+select *from stdtbl
+left join usttbl
+on stdbl.pid=usttbl.pid
+where prole is null;
+
+02. MariaDB[stkdb]
+select *from stdtbl
+left join psttbl
+on stdbl.pid=psttbl.pid
+where prole is null;
+
+03.MariaDB[stkdb]
+select *from stdtbl
+left join usttbl
+on stdbl.pid=usttbl.pid
+left join psttbl
+on stdbl.pid=psttbl.pid
+where usttbl.prole is null and psttbl.prole is null;
+
+04.MariaDB[stkdb]
+select *from stdtbl.pid,pname,edu from stdtbl
+left join usttbl
+on stdbl.pid=usttbl.pid
+left join psttbl
+on stdbl.pid=psttbl.pid
+where usttbl.prole is null and psttbl.prole is null;
+
+How to develop left join exclusion feature (way:03)?
+
+01. MariaDB[stkdb]
+select *from stdtbl
+where not exists
+(
+select 1 from usttbl
+where stdbl.pid=usttbl.pid
+);
+
+02. MariaDB[stkdb]
+select *from stdtbl
+where not exists
+(
+select 1 from psttbl
+where stdbl.pid=psttbl.pid
+);
+
+03. MariaDB[stkdb]>
+select *from stdtbl
+where not exists
+(
+select 1 from usttbl
+where stdbl.pid=usttbl.pid
+)
+and not exists
+(
+select 1 from psttbl
+where stdbl.pid=psttbl.pid
+);
+
+How to develop Right join feature(way01)?
+
+01.MariaDB[(stkdb)]>
+	select * from stdtbl
+	rightjoin usttbl
+	using(pid);
+
+02.MariaDB[(stkdb)]>
+	select * from stdtbl
+	right join psttbl
+	using (pid);
+
+03.MariaDB[(stkdb)]>
+	select * from stdtbl
+	right join usttbl
+	using(pid)
+	right join psttbl
+	using(pid);
+
+
+How to develop Right join feature(way02)?
+
+01..MariaDB[(stkdb)]>
+	select * from stdtbl
+	right join usttbl
+	on stdtbl.pid=usttbl.pid;
+
+02..MariaDB[(stkdb)]>
+select *from stdtbl
+right join psttbl
+on stdtbl.pid=psttbl.pid;
+
+03..MariaDB[stkdb]>
+select*from stdtbl
+right join usttbl
+on stdtbl.pid=usttbl.pid
+right join psttbl
+on stdtbl.pid=psttbl.pid;
+
+
+how to develop Right join exclusion feature (way:01)?
+
+01. MariaDB[stkdb]
+select *from stdtbl
+right join usttbl
+using(pid)
+where prole is null;
+
+02. MariaDB[stkdb]
+select *from stdtbl
+right join psttbl
+using(pid)
+where prole is null;
+
+
+03.MariaDB[stkdb]
+select *from stdtbl
+right join usttbl
+using(pid)
+right  join psttbl
+using(pid)
+where usttbl.prole is null and psttbl.prole is null;
+
+04.MariaDB[stkdb]
+select *from stdtbl.pid,pname,edu from stdtbl
+right join usttbl
+using(pid)
+right join psttbl
+using(pid)
+where usttbl.prole is null and psttbl.prole is null;
+
+05.MariaDB[stkdb]
+select *from stdtbl.pid,pname,edu from stdtbl
+right join usttbl
+using(pid)
+right join psttbl
+using(pid)
+where usttbl.prole is  not null and psttbl.prole is not null;
+
+how to develop Right join exclusion feature (way:02)?
+
+01. MariaDB[stkdb]
+select *from stdtbl
+right join usttbl
+on stdbl.pid=usttbl.pid
+where prole is null;
+
+02. MariaDB[stkdb]
+select *from stdtbl
+right join psttbl
+on stdbl.pid=psttbl.pid
+where prole is null;
+
+03.MariaDB[stkdb]
+select *from stdtbl
+right join usttbl
+on stdbl.pid=usttbl.pid
+right join psttbl
+on stdbl.pid=psttbl.pid
+where usttbl.prole is null and psttbl.prole is null;
+
+04.MariaDB[stkdb]
+select *from stdtbl.pid,pname,edu from stdtbl
+right join usttbl
+on stdbl.pid=usttbl.pid
+right  join psttbl
+on stdbl.pid=psttbl.pid
+where usttbl.prole is null and psttbl.prole is null;
+
+05.MariaDB[stkdb]
+select *from stdtbl.pid,pname,edu from stdtbl
+right join usttbl
+using(pid)
+right join psttbl
+using(pid)
+where usttbl.prole is  not null and psttbl.prole is not null;
+
+How to develop Full join  feature ?
+
+01. MariaDB[stkdb]
+select *from stdtbl
+full join usttbl;
+
+02. MariaDB[stkdb]
+select *from stdtbl
+full join psttbl;
+
+How to develop Full join exclusion  feature ?
+
+01. MariaDB[stkdb]
+select  stdtbl.*,prole from stdtbl
+left join usttbl
+on stdbl.pid=usttbl.pid;
+
+02. MariaDB[stkdb]
+select  stdtbl.*,prole from stdtbl
+right join usttbl
+on stdbl.pid=usttbl.pid;
+
+03. MariaDB[stkdb]
+select  stdtbl.*,prole from stdtbl
+left join usttbl
+on stdbl.pid=usttbl.pid;
+union
+select  stdtbl.*,prole from stdtbl
+right join usttbl
+on stdbl.pid=usttbl.pid;
+
+04.MariaDB[stkdb]> drop temporary table if exists stdusttbl;
+
+05. MariaDB[stkdb]>
+create  temporary table if  not exists stdusttbl
+as
+select  stdtbl.*,prole from stdtbl
+left join usttbl
+on stdbl.pid=usttbl.pid
+where prole is null
+union
+select  stdtbl.*,prole from stdtbl
+right join usttbl
+on stdbl.pid=usttbl.pid
+where prole is null;
+
+06. MariaDB[stkdb]>
+select * from stdusttbl;
+
+07. MariaDB[stkdb]>
+select  stdusttbl.pid,pname,edu from stdusttbl
+left join usttbl
+using(pid)
+where  psttbl.prole is null;
+
+How to develop cross join feature?
+
+01. MariaDB[stkdb]>
+select *from stdtbl
+cross join usttbl;
+
+02. MariaDB[stkdb]>
+select *from stdtbl
+cross join psttbl;
+
+

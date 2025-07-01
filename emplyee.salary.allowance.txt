@@ -1,0 +1,32 @@
+mariaDB[(none)]>use dbstk;
+mariaDB[dbstk]>create table empsalall(eid int primary key auto_increment)auto_increment=1001;
+
+mariaDB[dbstk]>alter table empsalall add column salary int not null,add column hra int as(salary*0.2),
+add column da int as(salary*0.15),add column pf int as(salary*0.35),add column gp int as(hra+da+salary),
+add column np int as(gp-pf);
+
+Query OK, 0 rows affected (0.409 sec)
+Records: 0  Duplicates: 0  Warnings: 0
+
+mariaDB[dbstk]>insert into empsalall(ename,salary)values('x1',100000);
+Query OK, 1 row affected (0.064 sec)
+mariaDB[dbstk]>insert into empsalall(empname,salary)values('x2',200000);
+Query OK, 1 row affected (0.064 sec)
+mariaDB[dbstk]>insert into empsalall(empname,salary)values('x3',400000);
+Query OK, 1 row affected (0.064 sec)
+mariaDB[dbstk]>insert into empsalall(empname,salary)values('x4',600000);
+Query OK, 1 row affected (0.064 sec)
+mariaDB[dbstk]>insert into empsalall(empname,salary)values('x5',800000);
+Query OK, 1 row affected (0.064 sec)
+
+mariaDB[dbstk]>select * from empsalall;
++------+---------+---------+--------+--------+--------+---------+---------+
+| eid  | empname | salary  | hra    | da     | pf     | gp      | np      |
++------+---------+---------+--------+--------+--------+---------+---------+
+| 1001 | x5      | 1000000 | 200000 | 150000 | 350000 | 1350000 | 1000000 |
+| 1002 | x4      |  200000 |  40000 |  30000 |  70000 |  270000 |  200000 |
+| 1003 | x3      |  400000 |  80000 |  60000 | 140000 |  540000 |  400000 |
+| 1004 | x1      |  600000 | 120000 |  90000 | 210000 |  810000 |  600000 |
+| 1005 | x2      |  800000 | 160000 | 120000 | 280000 | 1080000 |  800000 |
++------+---------+---------+--------+--------+--------+---------+---------+
+5 rows in set (0.242 sec)
